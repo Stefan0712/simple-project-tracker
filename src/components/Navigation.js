@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
 import Settings from "./Settings";
 import { useSelector, useDispatch } from "react-redux";
+import { useState } from "react";
 
 
 const Navigation = () => {
 
+    const [showSettings, setShowSettings] = useState(false)
+
     const theme = useSelector((state)=>state.user.userData.settings.theme);
     return ( 
         <nav className={theme}>
-            <Settings />
+            {showSettings ? <Settings closeSettings={()=>setShowSettings(false)}   /> : ''}
             <Link to={'/dashboard'}>
                 <img className="nav-icon" src='/icons/dashboard.svg' alt="dashboard"></img>
                 <p>Dashboard</p>
@@ -25,7 +28,7 @@ const Navigation = () => {
                 <img className="nav-icon" src='/icons/activity.svg' alt="activity"></img>
                 <p>Activity</p>
             </Link>
-            <button className="settings-button">
+            <button className="settings-button" onClick={()=>setShowSettings(true)}>
                 <img className="nav-icon" src='/icons/settings.svg' alt="settings"></img>
                 <p>Settings</p>
             </button>

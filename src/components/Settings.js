@@ -2,7 +2,7 @@ import { resetUser } from "../store/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { changeTheme } from "../store/userSlice";
 
-const Settings = () => {
+const Settings = ({closeSettings}) => {
 
     const settings = useSelector((state)=>state.user.userData.settings);
     const dispatch = useDispatch();
@@ -17,7 +17,10 @@ const Settings = () => {
 
     return ( 
         <div className={`settings ${settings.theme}`}>
-            <h1>Settings</h1>
+            <div className="setting-header">
+                <h1>Settings</h1>
+                <img src="/icons/close.svg" className="icon icon-30 settings-close-button" onClick={closeSettings}></img>
+            </div>
             <div className="setting-set">
                 <p>Theme</p>
                 <select onChange={(e)=>updateTheme(e.target.value)} value={settings?.theme}>

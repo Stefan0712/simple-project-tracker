@@ -56,8 +56,8 @@ const ColorPicker = ({getColor}) => {
                 </div>
             )}
             <div className="colors-container">
-                {colors.map((color)=>(
-                    <div className="color" style={{backgroundColor: color}} onClick={()=>pickColor(color)}></div>
+                {colors.map((color,index)=>(
+                    <div className="color" style={{backgroundColor: color}} onClick={()=>pickColor(color)} key={color+index}></div>
                 ))}
             </div>
         </div>

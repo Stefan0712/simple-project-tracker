@@ -102,6 +102,15 @@ nav a:hover{
     font-size: 1.2rem;
     font-weight: bold;
 }
+.setting-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: row;
+}
+
+
 nav.dark,
 .settings.dark{
     background-color: #111214;
@@ -134,8 +143,21 @@ nav.dark button img{
     background-color: #111214;
 }
 
-
-
+.icon-25{
+    width: 25px;
+    height: 25px;
+}
+.icon-30{
+    width: 30px;
+    height: 30px;
+}
+.icon-40{
+    width: 40px;
+    height: 40px;
+}
+.opacity-0{
+    opacity: 0;
+}
 
 
 
