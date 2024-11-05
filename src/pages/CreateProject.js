@@ -1,14 +1,18 @@
 import { getCurrentDay, convertToSlug, getCurrentDate } from "../helpers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import '../stylings/project.css';
 import { useState } from "react";
 import ColorPicker from "../components/ColorPicker";
 import { v4 as uuidv4 } from 'uuid';
+import { addProject } from "../store/userSlice";
+import { useNavigate } from "react-router-dom";
 
 
 const CreateProject = () => {
 
     const theme = useSelector((state)=>state.user.userData.settings.theme);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [projectName, setProjectName] = useState('');
     const [projectDescription, setProjectDescription] = useState('');
@@ -58,7 +62,6 @@ const CreateProject = () => {
         if(statusName){
             const item = {id: uuidv4(), name: statusName, color: statusColor, value: convertToSlug(statusName)};
             setStatuses((statuses)=>[...statuses, item]);
-            console.log(item);
             setStatusName('');
             setStatusColor('#FFFFFF');
             
@@ -78,7 +81,11 @@ const CreateProject = () => {
                     name: listName,
                     description: listDescription,
                     dueDate: listDueDate,
-                    priority: listPriority
+                    priority: listPriority,
+                    createdAt: getCurrentDay(),
+                    author: '',
+                    notes: [],
+
                 }
             ]);
             setListName('');
@@ -101,7 +108,10 @@ const CreateProject = () => {
                 priority: taskPriority,
                 subtasks: [],
                 statuses,
-                status: taskStatus
+                status: taskStatus,
+                isCompleted: false,
+                createdAt: getCurrentDay(),
+                author: ''
             }
             setTasks((tasks)=>[...tasks, task]);
         
@@ -133,9 +143,13 @@ const CreateProject = () => {
                 dueDate,
                 statuses,
                 lists,
-                tasks
+                tasks,
+                notes: [],
+                author: '',
+                createdAt: getCurrentDay(),
             };
-            console.log(projectData)
+            dispatch(addProject(projectData));
+            navigate('/dashboard');
         }else{
             setProjectNameError('Project Name cannot be empty!');
             setTimeout(()=>{setProjectNameError('')},1000);
@@ -223,8 +237,6 @@ const CreateProject = () => {
                     </div>
                     <div className="new-task">
                         <h3>Add Tasks</h3>
-                        {taskStatus?.name}
-                        {console.log(taskStatus.value)}
                         <div className="new-task-form">
                             <div className="inputs">
                                 <fieldset>

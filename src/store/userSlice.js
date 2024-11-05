@@ -17,10 +17,9 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         addProject: (state, action) => {
-            state.user.projects.push({
-                ...action.payload,
-                tasks: [], 
-            });
+            
+            state
+            .userData.projects.push(action.payload);
         },
         editProject: (state, action) => {
             const { projectId, updatedProject } = action.payload;
