@@ -19,7 +19,7 @@ const CreateProject = () => {
 
     //status values
     const [statusName, setStatusName] = useState('');
-    const [statusColor, setStatusColor] = useState('#33FF57');
+    const [statusColor, setStatusColor] = useState('#FFFFFF');
 
 
     //list values
@@ -35,6 +35,11 @@ const CreateProject = () => {
     const [taskDueDate, setTaskDueDate] = useState(getCurrentDate());
     const [taskPriority, setTaskPriority] = useState('normal');
    
+    //error validations
+    const [projectNameError, setProjectNameError] = useState('');
+    const [listNameError, setListNameError] = useState('');
+    const [taskNameError, setTaskNameError] = useState('');
+    const [statusNameError, setStatusNameError] = useState('');
 
     const getColor = (color) =>{
         setStatusColor(color);
@@ -49,46 +54,62 @@ const CreateProject = () => {
     }
     const addStatus = (e) =>{
         e.preventDefault();
-        const item = {id: uuidv4(), name: statusName, color: statusColor, value: convertToSlug(statusName)};
-        setStatuses((statuses)=>[...statuses, item]);
-        console.log(item);
-        setStatusName('');
-        setStatusColor('#33FF57');
+        if(statusName){
+            const item = {id: uuidv4(), name: statusName, color: statusColor, value: convertToSlug(statusName)};
+            setStatuses((statuses)=>[...statuses, item]);
+            console.log(item);
+            setStatusName('');
+            setStatusColor('#FFFFFF');
+            
+        }else{
+            setStatusNameError('Please enter a status name');
+            setTimeout(()=>{setStatusNameError('')},1000)
+        }
     }
 
     //lists handlers
 
     const handleAddList = (e) =>{
         e.preventDefault();
-        setLists((lists)=>[...lists, 
-            {   id: uuidv4(), 
-                name: listName,
-                description: listDescription,
-                dueDate: listDueDate,
-                priority: listPriority
-            }
-        ]);
-        setListName('');
-        setListDescription('');
-        setListDueDate('');
-        setListPriority('normal');
+        if(listName){
+            setLists((lists)=>[...lists, 
+                {   id: uuidv4(), 
+                    name: listName,
+                    description: listDescription,
+                    dueDate: listDueDate,
+                    priority: listPriority
+                }
+            ]);
+            setListName('');
+            setListDescription('');
+            setListDueDate('');
+            setListPriority('normal');
+        }else{
+            setListNameError('Please enter a list name');
+            setTimeout(()=>{setListNameError('')},1000)
+        }
     }
     const handleAddTask = (e) =>{
         e.preventDefault();
-        setTasks((tasks)=>[...tasks, 
-            {   
-                id: uuidv4(), 
-                name: taskName,
-                description: taskDescription,
-                dueDate: taskDueDate,
-                priority: taskPriority
-            }
-        ]);
-    
-        setTaskName('');
-        setTaskDescription('');
-        setTaskDueDate('');
-        setTaskPriority('normal');
+        if(taskName){
+            setTasks((tasks)=>[...tasks, 
+                {   
+                    id: uuidv4(), 
+                    name: taskName,
+                    description: taskDescription,
+                    dueDate: taskDueDate,
+                    priority: taskPriority
+                }
+            ]);
+        
+            setTaskName('');
+            setTaskDescription('');
+            setTaskDueDate('');
+            setTaskPriority('normal');
+        }else{
+            setTaskNameError('Please enter a task name');
+            setTimeout(()=>{setTaskNameError('')},1000)
+        }
     }
     const removeList = (e, id)=> {
         e.preventDefault();
@@ -134,12 +155,12 @@ const CreateProject = () => {
                         <label>Task Statuses</label>
                         <div className="new-status">
                             <ColorPicker getColor={getColor} />
-                            <input type="text" name="statusName" id="statusName" onChange={(e)=>setStatusName(e.target.value)} value={statusName} placeholder="Status Name"></input>
+                            <input type="text" className={statusNameError ? 'input-error' : ''} name="statusName" id="statusName" onChange={(e)=>setStatusName(e.target.value)} value={statusName} placeholder="Status Name"></input>
                             <img src="/icons/plus.svg" onClick={addStatus} className="icon add-status-button" alt="add status"></img>
                         </div>
                         <div className="statuses-container">
-                            {statuses.map((status)=>(
-                                <div className="status-body">
+                            {statuses.map((status, index)=>(
+                                <div className="status-body" key={index}>
                                     <div className="status-color" style={{backgroundColor: status.color}}></div>
                                     <div className="status-name">{status.name}</div>
                                     <img onClick={(e)=>removeStatus(e, status.value)} src="/icons/delete.svg" className="icon delete-status-button icon-30" alt="delete status"/>
@@ -155,7 +176,7 @@ const CreateProject = () => {
                             <div className="inputs">
                                 <fieldset>
                                     <label>List Name</label>
-                                    <input type="text" name="listName" id="listName" onChange={(e)=>setListName(e.target.value)} value={listName} />
+                                    <input className={listNameError ? 'input-error' : ''} type="text" name="listName" id="listName" onChange={(e)=>setListName(e.target.value)} value={listName} />
                                 </fieldset>
                                 <fieldset>
                                     <label>List Due Date</label>
@@ -185,7 +206,7 @@ const CreateProject = () => {
                                     <h3>{list.name}</h3>
                                     <p>{list.dueDate}</p>
                                     <p>{list.priority}</p>
-                                    <img onClick={(e)=>removeList(e, list.id)} src="/icons/delete.svg" className="icon delete-list-button" alt="delete list"/>
+                                    <img onClick={(e)=>removeList(e, list.id)} src="/icons/delete.svg" className="icon icon-30 delete-list-button" alt="delete list"/>
                                 </div>)) : (<p>Lists will appear here</p>)}
                         </div>
                     </div>
@@ -195,7 +216,7 @@ const CreateProject = () => {
                             <div className="inputs">
                                 <fieldset>
                                     <label>Task Name</label>
-                                    <input type="text" name="taskName" id="taskName" onChange={(e)=>setTaskName(e.target.value)} value={taskName} />
+                                    <input className={taskNameError ? 'input-error' : ''} type="text" name="taskName" id="taskName" onChange={(e)=>setTaskName(e.target.value)} value={taskName} />
                                     
                                 </fieldset>
                                 <fieldset>

@@ -158,7 +158,28 @@ nav.dark button img{
 .opacity-0{
     opacity: 0;
 }
-
+.input-error{
+    
+    animation-name: error-animation;
+    animation-duration: 0.5s;
+    border: 2px solid red !important;
+}
+@keyframes error-animation {
+    10%{
+        transform: translateX(5px);
+    }
+    20%{
+        transform: translateX(-5px);
+    }
+    30%{
+        transform: translateX(5px);
+    }
+    40%{
+        transform: translateX(-5px);
+    }
+   
+    
+}
 
 
 
