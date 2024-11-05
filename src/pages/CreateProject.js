@@ -34,6 +34,7 @@ const CreateProject = () => {
     const [taskDescription, setTaskDescription] = useState('');
     const [taskDueDate, setTaskDueDate] = useState('');
     const [taskPriority, setTaskPriority] = useState('normal');
+    const [taskStatus, setTaskStatus] = useState('')
    
     //error validations
     const [projectNameError, setProjectNameError] = useState('');
@@ -92,20 +93,23 @@ const CreateProject = () => {
     const handleAddTask = (e) =>{
         e.preventDefault();
         if(taskName){
-            setTasks((tasks)=>[...tasks, 
-                {   
-                    id: uuidv4(), 
-                    name: taskName,
-                    description: taskDescription,
-                    dueDate: taskDueDate,
-                    priority: taskPriority
-                }
-            ]);
+            const task = {   
+                id: uuidv4(), 
+                name: taskName,
+                description: taskDescription,
+                dueDate: taskDueDate,
+                priority: taskPriority,
+                subtasks: [],
+                statuses,
+                status: taskStatus
+            }
+            setTasks((tasks)=>[...tasks, task]);
         
             setTaskName('');
             setTaskDescription('');
             setTaskDueDate('');
             setTaskPriority('normal');
+            setTaskStatus('');
         }else{
             setTaskNameError('Please enter a task name');
             setTimeout(()=>{setTaskNameError('')},1000)
@@ -219,23 +223,31 @@ const CreateProject = () => {
                     </div>
                     <div className="new-task">
                         <h3>Add Tasks</h3>
+                        {taskStatus?.name}
+                        {console.log(taskStatus.value)}
                         <div className="new-task-form">
                             <div className="inputs">
                                 <fieldset>
-                                    <label>Task Name</label>
+                                    <label>Name</label>
                                     <input className={taskNameError ? 'input-error' : ''} type="text" name="taskName" id="taskName" onChange={(e)=>setTaskName(e.target.value)} value={taskName} />
-                                    
                                 </fieldset>
                                 <fieldset>
-                                    <label>Task Due Date</label>
+                                    <label>Status</label>
+                                    <select name="taskStatus" id="taskStatus" onChange={(e)=>setTaskStatus(statuses.find((item)=>item.id===e.target.value))} value={""}>
+                                        <option key={'no-selection-option'} value={''}>Not Set</option>
+                                        {statuses.map((status)=>(<option key={status.id} value={status.id}>{status.name}</option>))}
+                                    </select>
+                                </fieldset>
+                                <fieldset>
+                                    <label>Due Date</label>
                                     <input type="date" name="taskDueDate" id="taskDueDate" onChange={(e)=>setTaskDueDate(e.target.value)} value={taskDueDate} />
                                 </fieldset>
                                 <fieldset>
-                                    <label>Task Description</label>
+                                    <label>Description</label>
                                     <input type="text" name="taskDescription" id="taskDescription" onChange={(e)=>setTaskDescription(e.target.value)} value={taskDescription} />
                                 </fieldset>
                                 <fieldset>
-                                    <label>Task Priority</label>
+                                    <label>Priority</label>
                                     <select name="taskPriority" id="taskPriority" onChange={(e)=>setTaskPriority(e.target.value)} value={taskPriority}>
                                         <option value={'low'}>Low</option>
                                         <option value={'normal'}>Normal</option>
@@ -249,9 +261,13 @@ const CreateProject = () => {
                             </fieldset>
                         </div>
                         <div className="created-tasks-container">
+                            
                             {tasks.length > 0 ? tasks.map((task)=>(
-                                <div className="task-body">
+                                
+                                <div className="task-body" key={task.id}>
+                                    <div className="task-color" style={{backgroundColor: task.status?.color}}></div>
                                     <h3>{task.name}</h3>
+                                    <p>{task.status ? task.status.name : 'Not Set'}</p>
                                     <p>{task.dueDate}</p>
                                     <p>{task.priority}</p>
                                     <img onClick={(e)=>removeTask(e, task.id)} src="/icons/delete.svg" className="icon delete-task-button icon-30" alt="delete task"/>
