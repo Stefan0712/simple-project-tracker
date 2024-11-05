@@ -38,6 +38,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
+    gap: 20px;
 }
 .new-list,
 .new-task{
@@ -45,6 +46,9 @@
     height: 50%;
     display: flex;
     flex-direction: column;
+    background-color: #232425;
+    padding: 20px;
+    border-radius: 5px;
 }
 .new-task-form,
 .new-list-form{
@@ -53,6 +57,7 @@
     align-items: center;
     gap: 15px;
     height: 75px;
+    margin-top: 10px;
 }
 .create-project form .inputs{
     display: grid;
@@ -76,9 +81,35 @@
 .create-project .created-lists-container,
 .create-project .created-tasks-container{
     overflow-y: auto;
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.task-body,
+.list-body{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 15px;
+    border: 1px solid rgba(211, 211, 211, 0.267);
+    border-radius: 5px;
+    height: 40px;
+}
+.task-body img,
+.list-body img{
+    margin-left: auto;
 }
 
-
+.create-project-button{
+    width: 150px;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    background-color: #ff5733;
+    color: white;
+}
 
 
 /* statuses */
@@ -93,6 +124,7 @@
     display: flex;
     gap: 15px;
     align-items: center;
+    margin-top: 15px;
 }
 .new-status .status-input-group{
     display: flex;

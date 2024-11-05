@@ -12,7 +12,7 @@ const CreateProject = () => {
 
     const [projectName, setProjectName] = useState('');
     const [projectDescription, setProjectDescription] = useState('');
-    const [dueDate, setDueDate] = useState(getCurrentDate());
+    const [dueDate, setDueDate] = useState('');
     const [statuses, setStatuses] = useState([]);
     const [lists, setLists] = useState([]);
     const [tasks, setTasks] = useState([]);
@@ -25,14 +25,14 @@ const CreateProject = () => {
     //list values
     const [listName, setListName] = useState('')
     const [listDescription, setListDescription] = useState('');
-    const [listDueDate, setListDueDate] = useState(getCurrentDate());
+    const [listDueDate, setListDueDate] = useState('');
     const [listPriority, setListPriority] = useState('normal');
 
 
     //task values
     const [taskName, setTaskName] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
-    const [taskDueDate, setTaskDueDate] = useState(getCurrentDate());
+    const [taskDueDate, setTaskDueDate] = useState('');
     const [taskPriority, setTaskPriority] = useState('normal');
    
     //error validations
@@ -119,17 +119,23 @@ const CreateProject = () => {
         e.preventDefault();
         setTasks((tasks)=>[...tasks.filter((item)=>item.id !== id)])
     }
-    const handleCreateProject = () =>{
-        const projectData = {
-            id: uuidv4(),
-            name: projectName,
-            description: projectDescription,
-            dueDate,
-            statuses,
-            lists,
-            tasks
-        };
-        console.log(projectData)
+    const handleCreateProject = (e) =>{
+        e.preventDefault();
+        if(projectName){
+            const projectData = {
+                id: uuidv4(),
+                name: projectName,
+                description: projectDescription,
+                dueDate,
+                statuses,
+                lists,
+                tasks
+            };
+            console.log(projectData)
+        }else{
+            setProjectNameError('Project Name cannot be empty!');
+            setTimeout(()=>{setProjectNameError('')},1000);
+        }
     }
     return ( 
         <div className={`create-project page ${theme}`}>
@@ -141,7 +147,7 @@ const CreateProject = () => {
                 <div className="first-half">
                     <fieldset>
                         <label>Project name</label>
-                        <input type="text" name="name" id="name" onChange={(e)=>setProjectName(e.target.value)} value={projectName} />
+                        <input className={projectNameError ? 'input-error' : ''} type="text" name="name" id="name" onChange={(e)=>setProjectName(e.target.value)} value={projectName} />
                     </fieldset>
                     <fieldset>
                         <label>Description</label>
@@ -168,6 +174,7 @@ const CreateProject = () => {
                             ))}
                         </div>
                     </fieldset>
+                    <button className="create-project-button" onClick={handleCreateProject}>Create Project</button>
                 </div>
                 <div className="second-half">
                     <div className="new-list">
